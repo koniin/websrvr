@@ -4,7 +4,7 @@
 
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 
-char* append(char* first, char* second) {
+char* append(char *first, char *second) {
 	int size = strlen(first)+1;
 	int newSize = size + strlen(second);
 	char* nieuw = (char*)malloc(newSize);
@@ -14,7 +14,7 @@ char* append(char* first, char* second) {
 	return nieuw;
 }
 
-int printip(char* hostname) {
+int printip(char *hostname) {
 	struct addrinfo hints, *res = NULL;
 	memset(&hints, 0, sizeof hints);
 	hints.ai_flags = 0;
@@ -40,7 +40,7 @@ int printip(char* hostname) {
 	return 0;
 }
 
-int connect_to(char* addr, char* port) {
+int connect_to(char *addr, char *port) {
 	struct addrinfo hints, *res = NULL;
 	int sockfd;
 
@@ -67,7 +67,7 @@ int connect_to(char* addr, char* port) {
 
 	printf("\n Connected to %s : %s", addr, port);
 
-	char* msg = "GET / HTTP/1.1\r\nHost: ";
+	char *msg = "GET / HTTP/1.1\r\nHost: ";
 	msg = append(msg, addr);
 	msg = append(msg, ":");
 	msg = append(msg, port);

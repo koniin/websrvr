@@ -1,10 +1,47 @@
 #include "stdio.h"
 #include <winsock2.h>
 #include "Ws2tcpip.h"
+#include <windows.h>
 
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 
-int startlisten(char* port) {
+DWORD WINAPI ThreadFunc(void* data) {
+	// Do stuff.  This will be the first function called on the new thread.
+	// When this function returns, the thread goes away.  See MSDN for more details.
+	printf("on another thread");
+	return 0;
+}
+
+void readFileBOILERPLATE() {
+	/*
+
+	no error checking here!!
+
+	char * buffer = 0;
+	long length;
+	FILE * f = fopen(filename, "rb");
+
+	if (f)
+	{
+		fseek(f, 0, SEEK_END);
+		length = ftell(f);
+		fseek(f, 0, SEEK_SET);
+		buffer = malloc(length);
+		if (buffer)
+		{
+			fread(buffer, 1, length, f);
+		}
+		fclose(f);
+	}
+
+	if (buffer)
+	{
+		// start to process your data / extract strings here...
+	}
+	*/
+}
+
+int startlisten(char *port) {
 	struct sockaddr_storage their_addr;
 	struct addrinfo hints, *res;
 	int sockfd, new_fd;
@@ -31,6 +68,8 @@ int startlisten(char* port) {
 	// bind it to the port we passed in to getaddrinfo():
 	bind(sockfd, res->ai_addr, res->ai_addrlen);
 
+	freeaddrinfo(res);
+
 	int backlog = 3; // number of connections that can be queued
 	listen(sockfd, backlog);
 
@@ -56,7 +95,7 @@ int startlisten(char* port) {
 		return 1;
 	}
 
-	char* msg = "HTTP/1.1 200 OK\r\n" \
+	char *msg = "HTTP/1.1 200 OK\r\n" \
 		"Date: Saturday, 21 May 2016 23:23:23 GMT\r\n" \
 		"Server: Bloodcake 1.0\r\n" \
 		"Content-Type: text/html\r\n" \
@@ -90,7 +129,14 @@ int main(int argc, char *argv[]) {
 		printf("Failed. Error Code : %d", WSAGetLastError());
 		return 1;
 	}
-
+	
+	HANDLE thread = CreateThread(NULL, 0, ThreadFunc, NULL, 0, NULL);
+	if (thread) {
+		// Optionally do stuff, such as wait on the thread.
+		WaitForSingleObject(thread, INFINITE);
+		CloseHandle(thread);
+	}
+	
 	startlisten(argv[1]);
 
 	WSACleanup();
