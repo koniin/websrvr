@@ -86,12 +86,10 @@ int main(int argc, char *argv[]) {
 
 	WSADATA wsa; // Will hold info on socket
 
-	printf("\nInitialising Winsock...");
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
 		printf("Failed. Error Code : %d", WSAGetLastError());
 		return 1;
 	}
-	printf("Initialised.");
 
 	startlisten(argv[1]);
 

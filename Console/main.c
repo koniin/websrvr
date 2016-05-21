@@ -90,27 +90,9 @@ int connect_to(char* addr, char* port) {
 		}
 
 		printf("\n\nreply: %s", server_reply);
-
-		/*
-		//recv_size = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-		if (iResult > 0)
-			printf("Bytes received: %d\n", iResult);
-		else if (iResult == 0)
-			printf("Connection closed\n");
-		else
-			printf("recv failed: %d\n", WSAGetLastError());
-			*/
-
 	} while (recv_size > 0);
 
-	//Receive a reply from the server
-	
-
-	printf("\nReply received\n");
-
-	//Add a NULL terminating character to make it a proper string before printing
-	server_reply[recv_size] = '\0';
-	printf("\n\nreply: %s", server_reply);
+	printf("\nReply received.\n\nreply: %s", server_reply);
 
 	return 0;
 }
@@ -126,12 +108,10 @@ int main(int argc, char *argv[]) {
 	
 	WSADATA wsa; // Will hold info on socket
 	
-	printf("\nInitialising Winsock...");
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
 		printf("Failed. Error Code : %d", WSAGetLastError());
 		return 1;
 	}
-	printf("Initialised.\n");
 	
 	if (argc == 2)
 		printip(argv[1]);
